@@ -6,19 +6,15 @@ import emdash from "emdash/astro";
 import vercel from "@astrojs/vercel";
 import { libsql, sqlite } from "emdash/db";
 
-const tursoUrl = process.env.TURSO_DATABASE_URL;
-const blobStorageEntry = fileURLToPath(new URL("./src/storage/vercel-blob.ts", import.meta.url));
+const tursoUrl = process.env.TURSO_DATABASE_URL?.replace(/^"|"$/g, "");
+const tursoToken = process.env.TURSO_AUTH_TOKEN?.replace(/^"|"$/g, "");
+const blobStorageEntry = fileURLToPath(
+	new URL("./src/storage/vercel-blob.ts", import.meta.url),
+).replaceAll("\\", "/");
 
 export default defineConfig({
 	output: "server",
 	adapter: vercel(),
-	vite: {
-		resolve: {
-			alias: {
-				"paradox-blob-storage": blobStorageEntry,
-			},
-		},
-	},
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,
@@ -26,9 +22,11 @@ export default defineConfig({
 	integrations: [
 		react(),
 		emdash({
-			database: tursoUrl ? libsql({ url: tursoUrl }) : sqlite({ url: "file:./data.db" }),
+			database: tursoUrl
+				? libsql({ url: tursoUrl, authToken: tursoToken })
+				: sqlite({ url: "file:./data.db" }),
 			storage: {
-				entrypoint: "paradox-blob-storage",
+				entrypoint: blobStorageEntry,
 				config: {},
 			},
 			plugins: [auditLog],

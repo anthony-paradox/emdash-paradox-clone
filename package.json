@@ -15,9 +15,10 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.5",
     "@astrojs/react": "^6.0.5",
+    "@astrojs/vercel": "^11.0.11",
     "@emdash-cms/plugin-audit-log": "^0.2.2",
+    "@vercel/blob": "^2.8.0",
     "astro": "^7.3.2",
     "emdash": "^0.39.1",
     "react": "19.2.4",

@@ -1,15 +1,24 @@
-import node from "@astrojs/node";
+import { fileURLToPath } from "node:url";
 import react from "@astrojs/react";
 import auditLog from "@emdash-cms/plugin-audit-log";
 import { defineConfig, fontProviders } from "astro/config";
-import emdash, { local } from "emdash/astro";
-import { sqlite } from "emdash/db";
+import emdash from "emdash/astro";
+import vercel from "@astrojs/vercel";
+import { libsql, sqlite } from "emdash/db";
+
+const tursoUrl = process.env.TURSO_DATABASE_URL;
+const blobStorageEntry = fileURLToPath(new URL("./src/storage/vercel-blob.ts", import.meta.url));
 
 export default defineConfig({
 	output: "server",
-	adapter: node({
-		mode: "standalone",
-	}),
+	adapter: vercel(),
+	vite: {
+		resolve: {
+			alias: {
+				"paradox-blob-storage": blobStorageEntry,
+			},
+		},
+	},
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,
@@ -17,11 +26,11 @@ export default defineConfig({
 	integrations: [
 		react(),
 		emdash({
-			database: sqlite({ url: "file:./data.db" }),
-			storage: local({
-				directory: "./uploads",
-				baseUrl: "/_emdash/api/media/file",
-			}),
+			database: tursoUrl ? libsql({ url: tursoUrl }) : sqlite({ url: "file:./data.db" }),
+			storage: {
+				entrypoint: "paradox-blob-storage",
+				config: {},
+			},
 			plugins: [auditLog],
 			mcp: {
 			enabled: true,

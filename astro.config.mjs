@@ -21,6 +21,11 @@ const blobStorageEntry = fileURLToPath(
 export default defineConfig({
 	output: "server",
 	adapter: vercel(),
+	session: {
+		driver: {
+			entrypoint: new URL("./src/session/turso-driver.ts", import.meta.url),
+		},
+	},
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,

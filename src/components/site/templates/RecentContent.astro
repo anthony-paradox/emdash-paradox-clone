@@ -1,0 +1,44 @@
+---
+type EntryLike = {
+	slug: string;
+	title: string;
+	excerpt?: string | null;
+};
+
+interface Props {
+	entries: EntryLike[];
+	basePath: string;
+	title?: string;
+}
+
+const {
+	entries,
+	basePath,
+	title = "Keep exploring",
+} = Astro.props;
+---
+
+{
+	entries.length > 0 && (
+		<section class="content-section content-recent">
+			<div class="pdx-content-container">
+				<div class="content-section__heading content-section__heading--row">
+					<div>
+						<p class="content-kicker">Related thinking</p>
+						<h2>{title}</h2>
+					</div>
+					<a href={basePath}>View all <span aria-hidden="true">→</span></a>
+				</div>
+				<div class="content-recent__grid">
+					{entries.slice(0, 3).map((entry, index) => (
+						<a href={`${basePath}/${entry.slug}`} class="content-recent__card">
+							<span>{String(index + 1).padStart(2, "0")}</span>
+							<h3>{entry.title}</h3>
+							{entry.excerpt && <p>{entry.excerpt}</p>}
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	)
+}

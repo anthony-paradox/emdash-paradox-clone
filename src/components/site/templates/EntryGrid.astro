@@ -1,0 +1,63 @@
+---
+type EntryLike = {
+	slug: string;
+	title: string;
+	excerpt?: string | null;
+	image?: string | null;
+};
+
+interface Props {
+	entries: EntryLike[];
+	basePath: string;
+	variant?: string;
+	emptyMessage?: string;
+}
+
+const {
+	entries,
+	basePath,
+	variant = "default",
+	emptyMessage = "New work is being added. Check back soon.",
+} = Astro.props;
+
+const labels: Record<string, string> = {
+	capability: "Connected service",
+	industry: "Industry expertise",
+	insight: "Field note",
+	portfolio: "Selected work",
+	case: "Client result",
+	team: "Meet the team",
+	career: "Opportunity",
+	location: "Where we work",
+};
+---
+
+{
+	entries.length ? (
+		<div class={`content-card-grid content-card-grid--${variant}`}>
+			{entries.map((entry, index) => (
+				<a class="content-card" href={`${basePath}/${entry.slug}`}>
+					<div
+						class:list={["content-card__media", !entry.image && "content-card__media--generated"]}
+						style={entry.image ? `background-image:url("${entry.image}")` : undefined}
+						aria-hidden="true"
+					>
+						{!entry.image && (
+							<span>{String(index + 1).padStart(2, "0")}</span>
+						)}
+					</div>
+					<div class="content-card__body">
+						<p class="content-card__meta">{labels[variant] ?? "Explore"}</p>
+						<h2>{entry.title}</h2>
+						{entry.excerpt && <p>{entry.excerpt}</p>}
+						<span class="content-card__link">
+							Explore <span aria-hidden="true">↗</span>
+						</span>
+					</div>
+				</a>
+			))}
+		</div>
+	) : (
+		<p class="content-empty">{emptyMessage}</p>
+	)
+}

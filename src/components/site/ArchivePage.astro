@@ -1,0 +1,154 @@
+---
+import Base from "../../layouts/Base.astro";
+import { loadEntries } from "../../utils/entries";
+import ContentHero from "./templates/ContentHero.astro";
+import EntryGrid from "./templates/EntryGrid.astro";
+import MetricSection from "./templates/MetricSection.astro";
+import CtaSection from "./templates/CtaSection.astro";
+import "../../styles/paradox/content.css";
+
+type Family =
+	| "capability"
+	| "industry"
+	| "insight"
+	| "portfolio"
+	| "case"
+	| "team"
+	| "career"
+	| "location";
+
+interface Props {
+	title: string;
+	intro: string;
+	basePath: string;
+	collection: string;
+	variant?: Family;
+	kicker?: string;
+}
+
+const {
+	title,
+	intro,
+	basePath,
+	collection,
+	variant = "insight",
+	kicker,
+} = Astro.props;
+const entries = await loadEntries(collection);
+
+const familyCopy: Record<Family, {
+	kicker: string;
+	sectionTitle: string;
+	sectionIntro: string;
+	metrics: { value: string; label: string }[];
+	ctaTitle?: string;
+}> = {
+	capability: {
+		kicker: "What we do",
+		sectionTitle: "Specialists who work as one team",
+		sectionIntro: "Every capability connects to the same growth system: attract, convert, follow up, and learn.",
+		metrics: [
+			{ value: "100+", label: "websites under management" },
+			{ value: "6K+", label: "leads generated each month" },
+			{ value: "1K+", label: "processes automated" },
+		],
+	},
+	industry: {
+		kicker: "Who we help",
+		sectionTitle: "Context changes the strategy",
+		sectionIntro: "Deep industry understanding helps us build systems around real buying journeys, regulations, and sales cycles.",
+		metrics: [
+			{ value: "12+", label: "countries represented by our team" },
+			{ value: "10", label: "core industries served" },
+			{ value: "1", label: "connected growth system" },
+		],
+	},
+	insight: {
+		kicker: "Ideas & intelligence",
+		sectionTitle: "Practical thinking for connected growth",
+		sectionIntro: "Lessons from the systems, campaigns, and teams we work with every day.",
+		metrics: [
+			{ value: "4M+", label: "organic clicks generated annually" },
+			{ value: "$400K", label: "monthly ad spend managed" },
+			{ value: "100+", label: "sites producing useful data" },
+		],
+	},
+	portfolio: {
+		kicker: "Selected work",
+		sectionTitle: "Built to perform after launch",
+		sectionIntro: "Our work brings brand, technology, acquisition, and operations into the same frame.",
+		metrics: [
+			{ value: "100+", label: "websites under management" },
+			{ value: "4M+", label: "annual organic clicks" },
+			{ value: "170+", label: "sales reps supported" },
+		],
+	},
+	case: {
+		kicker: "Proof, not promises",
+		sectionTitle: "Outcomes across the whole funnel",
+		sectionIntro: "The strongest result is not one isolated metric—it is a system that keeps creating momentum.",
+		metrics: [
+			{ value: "6K+", label: "monthly leads generated" },
+			{ value: "1K+", label: "automated processes" },
+			{ value: "4M+", label: "annual organic clicks" },
+		],
+	},
+	team: {
+		kicker: "People of Paradox",
+		sectionTitle: "Global expertise, one close team",
+		sectionIntro: "Strategists, creatives, developers, and operators collaborate across disciplines and time zones.",
+		metrics: [
+			{ value: "12+", label: "countries represented" },
+			{ value: "Remote", label: "by design, not by default" },
+			{ value: "One", label: "team around every client" },
+		],
+		ctaTitle: "Want to work with this team?",
+	},
+	career: {
+		kicker: "Build with us",
+		sectionTitle: "Do ambitious work without the silos",
+		sectionIntro: "We value clear thinking, generous collaboration, and people who leave systems better than they found them.",
+		metrics: [
+			{ value: "Remote", label: "work from where you do your best" },
+			{ value: "12+", label: "countries and perspectives" },
+			{ value: "Always", label: "learning and improving" },
+		],
+		ctaTitle: "Could Paradox be your next move?",
+	},
+	location: {
+		kicker: "Where we work",
+		sectionTitle: "Distributed globally, connected daily",
+		sectionIntro: "Our remote model puts the right specialist on the work, wherever the client or challenge happens to be.",
+		metrics: [
+			{ value: "12+", label: "countries represented" },
+			{ value: "24/5", label: "cross-time-zone collaboration" },
+			{ value: "Global", label: "clients and perspective" },
+		],
+	},
+};
+
+const copy = familyCopy[variant];
+---
+
+<Base title={title} description={intro}>
+	<div class={`marketing-archive marketing-archive--${variant}`}>
+		<ContentHero
+			title={title}
+			intro={intro}
+			kicker={kicker ?? copy.kicker}
+			variant={variant}
+		/>
+		<section class="content-section content-listing">
+			<div class="pdx-content-container">
+				<div class="content-section__heading">
+					<p class="content-kicker">Explore {title.toLowerCase()}</p>
+					<h2>{copy.sectionTitle}</h2>
+					<p>{copy.sectionIntro}</p>
+				</div>
+				<EntryGrid entries={entries} basePath={basePath} variant={variant} />
+			</div>
+		</section>
+		<MetricSection metrics={copy.metrics} />
+		<CtaSection title={copy.ctaTitle} />
+	</div>
+</Base>

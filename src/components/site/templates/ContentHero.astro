@@ -1,0 +1,24 @@
+---
+interface Props {
+	title: string;
+	intro?: string;
+	kicker?: string;
+	variant?: string;
+}
+
+const {
+	title,
+	intro,
+	kicker = "Paradox Marketing",
+	variant = "default",
+} = Astro.props;
+---
+
+<header class={`content-hero content-hero--${variant}`}>
+	<div class="content-hero__pattern" aria-hidden="true"></div>
+	<div class="pdx-content-container content-hero__inner">
+		<p class="content-kicker">{kicker}</p>
+		<h1>{title}</h1>
+		{intro && <p class="content-hero__intro">{intro}</p>}
+	</div>
+</header>

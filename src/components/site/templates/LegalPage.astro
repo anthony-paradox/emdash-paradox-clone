@@ -1,0 +1,45 @@
+---
+import { decodeSlug, getEmDashEntry } from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../../../layouts/Base.astro";
+import ContentHero from "./ContentHero.astro";
+import { findLiveEntry } from "../../../data/live-site";
+import "../../../styles/paradox/content.css";
+
+interface Props {
+	slug?: string;
+}
+
+const slug = decodeSlug(Astro.props.slug);
+if (!slug) return Astro.redirect("/404");
+
+let page: { data: { id?: string; title: string; content?: unknown }; edit?: Record<string, unknown> } | undefined;
+try {
+	const result = await getEmDashEntry("pages", slug);
+	page = result.entry ?? undefined;
+	if (result.cacheHint && Astro.cache?.enabled) Astro.cache.set(result.cacheHint);
+} catch (error) {
+	console.warn("Legal page EmDash lookup failed", error);
+}
+const live = findLiveEntry("pages", slug);
+if (!page && !live) return Astro.redirect("/404");
+const title = page?.data.title ?? live?.title ?? "Legal";
+---
+
+<Base
+	title={title}
+	content={page?.data.id ? { collection: "pages", id: page.data.id, slug } : undefined}
+>
+	<article class="legal-page">
+		<ContentHero title={title} kicker="Legal" variant="legal" />
+		<div class="pdx-content-container legal-page__layout">
+			<aside>
+				<p class="content-kicker">Paradox Marketing</p>
+				<p>Company policies and terms.</p>
+			</aside>
+			<div class="legal-page__content">
+				{page?.data.content ? <PortableText value={page.data.content} /> : <p>{live?.content}</p>}
+			</div>
+		</div>
+	</article>
+</Base>

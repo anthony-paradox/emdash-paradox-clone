@@ -1,0 +1,145 @@
+---
+import { HUBSPOT, LOGO, footerColumns, legalLinks, socials } from "../../data/live-site";
+
+interface Props {
+	footerMenu?: unknown;
+	socialMenu?: unknown;
+	settings?: unknown;
+}
+
+const year = new Date().getFullYear();
+---
+
+<footer class="main-footer">
+	<div class="footer-container pdx-container">
+		<div class="footer-brand">
+			<a href="/">
+				<img src={LOGO} alt="Paradox Marketing" class="footer-logo" width="200" height="30" />
+			</a>
+			<p class="social-title">Our Socials</p>
+			<div class="social-icons">
+				{
+					socials.map((item) => (
+						<a class="social-circle" href={item.href} aria-label={item.label} target={item.href.startsWith("http") ? "_blank" : undefined} rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+							{item.icon === "facebook" && (
+								<svg width="8" height="15" viewBox="0 0 8 15" aria-hidden="true"><path d="M6.47 0C6.72.02 6.97.04 7.22.06 7.39.07 7.56.09 7.74.11V2.49H7.58C7.07 2.5 6.55 2.49 6.04 2.52 5.41 2.55 5.07 2.89 5.04 3.52 5.02 4.15 5.03 4.79 5.03 5.43V5.49H7.65L7.31 8.16H5.04V15H2.29V8.16H0V5.5H2.29C2.29 4.61 2.27 3.91 2.3 3.21 2.34 2.37 2.58 1.6 3.17.98 3.62.5 4.18.22 4.81.09 4.99.06 5.16.03 5.33 0H6.47Z" fill="white"/></svg>
+							)}
+							{item.icon === "linkedin" && (
+								<svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><path d="M5.3 5H8.26V6.35C8.99 5.24 9.97 4.78 11.19 4.75 11.87 4.74 12.54 4.82 13.16 5.12 13.97 5.51 14.43 6.18 14.68 7.02 14.88 7.69 14.95 8.38 14.95 9.08V15H11.86V9.86C11.85 9.49 11.82 9.11 11.76 8.75 11.57 7.72 10.9 7.37 9.95 7.49 9.09 7.59 8.61 8.09 8.47 9.04 8.42 9.38 8.4 9.73 8.4 10.07V15H5.3V5ZM3.34 15H.26V5H3.34V15ZM3.59 1.79C3.6 2.79 2.79 3.61 1.81 3.62.82 3.63 0 2.8 0 1.8 0 .82.8.01 1.78 0 2.77-.01 3.58.79 3.59 1.79Z" fill="white"/></svg>
+							)}
+							{item.icon === "email" && (
+								<svg width="15" height="11" viewBox="0 0 15 11" aria-hidden="true"><path d="M0 1.14.12.77l4.52 4.49L.12 9.75 0 9.41V1.14ZM.76.11 7.08 6.47 14.08.13 13.55 0H1.41L.76.11ZM.77 10.42l4.52-4.49 1.16 1.16c.6.61 1.44.61 2.05 0l1.16-1.16 4.53 4.5-.47.1H1.4L.77 10.42ZM14.87 9.8 10.32 5.28 14.85.79l.11.43V9.16c0 .21-.06.42-.09.64Z" fill="white"/></svg>
+							)}
+							{item.icon === "phone" && (
+								<svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><path d="M3.97 6.08C5.18 8.02 6.73 9.6 8.61 10.87l.12-.12c.64-.73 1.38-1.36 2.19-1.9.07-.05.12-.04.19 0 1.29.76 2.45 1.69 3.47 2.79.07.08.08.14.06.23-.31 1.36-1.16 2.27-2.37 2.9-.57.29-1.13.28-1.73.14C8.64 14.47 6.96 13.6 5.44 12.41 3.51 10.9 1.98 9.05.95 6.81.4 5.6.04 4.34 0 3v-.2C.55 1.43 1.48.48 2.9.07c.42-.12.42-.11.73.2 1 .99 1.79 2.14 2.47 3.37.04.08.03.13-.02.2-.58.8-1.23 1.52-2 .15-.03.02-.06.05-.11.09Z" fill="white"/></svg>
+							)}
+						</a>
+					))
+				}
+			</div>
+		</div>
+		<div class="footer-links">
+			{
+				footerColumns.map((col) => (
+					<div class="link-col">
+						<p class="labels">{col.title}</p>
+						<ul>
+							{col.links.map((link) => (
+								<li>
+									<a href={link.href}>{link.label}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</div>
+	<div class="footer-bottom">
+		<p class="footer-legal">
+			{
+				legalLinks.map((link, index) => (
+					<>
+						{index > 0 && <span> | </span>}
+						<a href={link.href}>{link.label}</a>
+					</>
+				))
+			}
+			<span> | </span>
+			<span>© {year} Paradox Marketing</span>
+		</p>
+	</div>
+</footer>
+
+<div class="lets-talk" id="letsTalk" hidden>
+	<div class="lets-talk-card" role="dialog" aria-labelledby="letsTalkTitle" aria-modal="true">
+		<button type="button" class="lets-talk-close" data-close aria-label="Close">Close</button>
+		<h2 id="letsTalkTitle">Let’s talk</h2>
+		<div id="hubspot-popup">
+			<p class="hs-form-loading">Loading form...</p>
+		</div>
+		<p class="hs-fallback">
+			Or <a href={HUBSPOT.meetingUrl} target="_blank" rel="noopener noreferrer">book a discovery call</a>.
+		</p>
+	</div>
+</div>
+
+<script define:vars={{ portalId: HUBSPOT.portalId, formId: HUBSPOT.formId, region: HUBSPOT.region, redirectBase: HUBSPOT.redirectBase }}>
+	let formInitialized = false;
+	const ensureScript = () =>
+		new Promise((resolve) => {
+			if (window.hbspt?.forms) {
+				resolve();
+				return;
+			}
+			const existing = document.querySelector('script[src*="js.hsforms.net/forms/embed/v2.js"]');
+			if (existing) {
+				existing.addEventListener("load", () => resolve());
+				return;
+			}
+			const script = document.createElement("script");
+			script.src = "https://js.hsforms.net/forms/embed/v2.js";
+			script.onload = () => resolve();
+			document.body.appendChild(script);
+		});
+
+	const openTalk = async () => {
+		document.querySelector("#letsTalk")?.removeAttribute("hidden");
+		if (formInitialized) return;
+		await ensureScript();
+		if (!window.hbspt?.forms) return;
+		document.querySelector("#hubspot-popup")?.replaceChildren();
+		window.hbspt.forms.create({
+			portalId,
+			formId,
+			region,
+			target: "#hubspot-popup",
+			onFormSubmitted(_form, data) {
+				const values = data?.submissionValues || {};
+				const params = new URLSearchParams({
+					firstname: values.firstname || "",
+					lastname: values.lastname || "",
+					email: values.email || "",
+					company: values.company || "",
+				});
+				window.location.href = `${redirectBase}?${params.toString()}`;
+			},
+		});
+		formInitialized = true;
+	};
+
+	document.addEventListener("click", (event) => {
+		const target = event.target instanceof Element ? event.target : null;
+		if (target?.closest("[data-talk]")) {
+			event.preventDefault();
+			void openTalk();
+		}
+		if (target?.closest("[data-close]") || target?.id === "letsTalk") {
+			document.querySelector("#letsTalk")?.setAttribute("hidden", "");
+		}
+	});
+</script>
+
+<script is:inline>
+	window.hbspt = window.hbspt || undefined;
+</script>

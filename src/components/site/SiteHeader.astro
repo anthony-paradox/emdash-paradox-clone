@@ -1,0 +1,127 @@
+---
+import { LOGO } from "../../data/live-site";
+import { resolvePrimaryNav } from "../../utils/menu";
+
+interface Props {
+	menu?: { items: { label: string; url?: string | null; customUrl?: string | null; parentId?: string | null; id?: string }[] } | null;
+	isLoggedIn?: boolean;
+	transparent?: boolean;
+	isHome?: boolean;
+}
+
+const { menu, isLoggedIn, transparent = false, isHome = false } = Astro.props;
+const items = resolvePrimaryNav(menu);
+const homeChrome = transparent || isHome;
+---
+
+<header id="new-header" class:list={["header2026", { "is-home": homeChrome }]}>
+	<div class="pdx-container header-content">
+		<a href="/" class="logo-link" aria-label="Paradox Marketing">
+			<img src={LOGO} alt="Paradox Marketing" width="328" height="40" />
+		</a>
+		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+	</div>
+</header>
+<div class="header-spacer"></div>
+
+<nav id="site-menu" class="mm-panel" hidden>
+	<div class="mm-backdrop" data-menu-close></div>
+	<div class="mm-drawer" role="dialog" aria-label="Main">
+		<div class="mm-top">
+			<p>From Complex Challenges To Simple Solutions</p>
+			<p>We've Got You Covered</p>
+			<button type="button" class="mm-close" data-menu-close aria-label="Close menu">×</button>
+		</div>
+		<div class="mm-stack" data-menu-stack>
+			<section class="mm-view is-active" data-panel="root">
+				<ul>
+					{
+						items.map((item, index) => (
+							<li>
+								{item.children?.length ? (
+									<button type="button" data-open-panel={`panel-${index}`}>
+										{item.label}
+									</button>
+								) : (
+									<a href={item.href}>{item.label}</a>
+								)}
+							</li>
+						))
+					}
+					{isLoggedIn && (
+						<li>
+							<a href="/_emdash/admin">Admin</a>
+						</li>
+					)}
+				</ul>
+			</section>
+			{
+				items.map((item, index) =>
+					item.children?.length ? (
+						<section class="mm-view" data-panel={`panel-${index}`} hidden>
+							<button type="button" class="mm-back" data-back>
+								Back
+							</button>
+							<a class="mm-parent" href={item.href}>
+								{item.label}
+							</a>
+							<ul>
+								{item.children.map((child) => (
+									<li>
+										<a href={child.href}>{child.label}</a>
+									</li>
+								))}
+							</ul>
+						</section>
+					) : null,
+				)
+			}
+		</div>
+		<div class="mm-bottom">
+			<a class="btn-talk" href="/contact-us">Contact Us</a>
+		</div>
+	</div>
+</nav>
+
+<script>
+	const header = document.querySelector("#new-header");
+	const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+	const nav = document.querySelector("#site-menu");
+	const views = () => [...(nav?.querySelectorAll<HTMLElement>(".mm-view") ?? [])];
+
+	const showPanel = (id: string) => {
+		views().forEach((view) => {
+			const active = view.dataset.panel === id;
+			view.classList.toggle("is-active", active);
+			view.hidden = !active;
+		});
+	};
+
+	const setOpen = (open: boolean) => {
+		nav?.toggleAttribute("hidden", !open);
+		nav?.classList.toggle("is-open", open);
+		toggle?.setAttribute("aria-expanded", String(open));
+		toggle?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+		document.body.classList.toggle("menu-open", open);
+		if (open) showPanel("root");
+	};
+
+	toggle?.addEventListener("click", () => setOpen(!nav?.classList.contains("is-open")));
+	nav?.addEventListener("click", (event) => {
+		const target = event.target as HTMLElement;
+		if (target.closest("[data-menu-close]")) setOpen(false);
+		const opener = target.closest<HTMLElement>("[data-open-panel]");
+		if (opener?.dataset.openPanel) showPanel(opener.dataset.openPanel);
+		if (target.closest("[data-back]")) showPanel("root");
+	});
+	document.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") setOpen(false);
+	});
+	const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 50);
+	onScroll();
+	window.addEventListener("scroll", onScroll, { passive: true });
+</script>

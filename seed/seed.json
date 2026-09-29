@@ -1,0 +1,225 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Paradox Marketing",
+		"description": "Content model for the Paradox Marketing website clone",
+		"author": "Paradox Marketing"
+	},
+	"settings": {
+		"title": "Paradox Marketing",
+		"tagline": "Have Our Team Become YOUR Team"
+	},
+	"collections": [
+		{
+			"slug": "home",
+			"label": "Homepage",
+			"labelSingular": "Homepage",
+			"supports": ["drafts", "revisions", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "hero_heading", "label": "Hero Heading", "type": "string" },
+				{ "slug": "hero_body", "label": "Hero Body", "type": "text" },
+				{ "slug": "hero_cta", "label": "Hero CTA", "type": "json" },
+				{ "slug": "hero_media", "label": "Hero Media", "type": "json" },
+				{ "slug": "brand_logos", "label": "Brand Logos", "type": "json" },
+				{ "slug": "what_we_do", "label": "What We Do", "type": "json" },
+				{ "slug": "service_pillars", "label": "Service Pillars", "type": "json" },
+				{ "slug": "problems", "label": "Problems", "type": "json" },
+				{ "slug": "metrics", "label": "Metrics", "type": "json" },
+				{ "slug": "work_with_us", "label": "Work With Us", "type": "json" },
+				{ "slug": "technology", "label": "Technology", "type": "json" },
+				{ "slug": "portfolio_order", "label": "Portfolio Order", "type": "json" },
+				{ "slug": "who_we_are", "label": "Who We Are", "type": "json" },
+				{ "slug": "insights_settings", "label": "Insights Settings", "type": "json" }
+			]
+		},
+		{
+			"slug": "capabilities",
+			"label": "Capabilities",
+			"labelSingular": "Capability",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "banner_heading", "label": "Banner Heading", "type": "string" },
+				{ "slug": "template_variant", "label": "Template Variant", "type": "string" },
+				{ "slug": "parent_slug", "label": "Parent Slug", "type": "string" }
+			]
+		},
+		{
+			"slug": "industries",
+			"label": "Industries",
+			"labelSingular": "Industry",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "banner_heading", "label": "Banner Heading", "type": "string" },
+				{ "slug": "metrics", "label": "Metrics", "type": "json" },
+				{ "slug": "executives", "label": "Executives", "type": "json" }
+			]
+		},
+		{
+			"slug": "insights",
+			"label": "Insights",
+			"labelSingular": "Insight",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "service_tags", "label": "Service Tags", "type": "json" }
+			]
+		},
+		{
+			"slug": "portfolio",
+			"label": "Portfolio",
+			"labelSingular": "Portfolio Item",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "banner_image", "label": "Banner Image", "type": "image" },
+				{ "slug": "services", "label": "Services", "type": "string" },
+				{ "slug": "year_started", "label": "Year Started", "type": "number" },
+				{ "slug": "accent_color", "label": "Accent Color", "type": "string" },
+				{ "slug": "case_study", "label": "Case Study", "type": "json" }
+			]
+		},
+		{
+			"slug": "people",
+			"label": "People",
+			"labelSingular": "Person",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Name", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Biography", "type": "portableText", "searchable": true },
+				{ "slug": "profile_image", "label": "Profile Image", "type": "image" },
+				{ "slug": "position", "label": "Position", "type": "string" },
+				{ "slug": "profile_details", "label": "Profile Details", "type": "json" }
+			]
+		},
+		{
+			"slug": "careers",
+			"label": "Careers",
+			"labelSingular": "Career",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "job_details", "label": "Job Details", "type": "json" }
+			]
+		},
+		{
+			"slug": "locations",
+			"label": "Locations",
+			"labelSingular": "Location",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "location_details", "label": "Location Details", "type": "json" }
+			]
+		},
+		{
+			"slug": "case_studies",
+			"label": "Case Studies",
+			"labelSingular": "Case Study",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "project_data", "label": "Project Data", "type": "json" }
+			]
+		},
+		{
+			"slug": "clutch_reviews",
+			"label": "Clutch Reviews",
+			"labelSingular": "Clutch Review",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Reviewer", "type": "string", "required": true },
+				{ "slug": "stars", "label": "Stars", "type": "number" },
+				{ "slug": "position", "label": "Position", "type": "string" },
+				{ "slug": "feedback_summary", "label": "Feedback", "type": "text" }
+			]
+		},
+		{
+			"slug": "posts",
+			"label": "Posts",
+			"labelSingular": "Post",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" }
+			]
+		},
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" }
+			]
+		}
+	],
+	"menus": [
+		{
+			"name": "primary",
+			"label": "Primary Navigation",
+			"items": [
+				{ "type": "custom", "label": "Capabilities", "url": "/capabilities" },
+				{ "type": "custom", "label": "Content Marketing", "url": "/capabilities/content-marketing" },
+				{ "type": "custom", "label": "CRM Strategy", "url": "/capabilities/crm-strategy" },
+				{ "type": "custom", "label": "Industries", "url": "/industries" },
+				{ "type": "custom", "label": "Insights", "url": "/insights" },
+				{ "type": "custom", "label": "Blog", "url": "/blog" },
+				{ "type": "custom", "label": "Our Team", "url": "/our-team" },
+				{ "type": "custom", "label": "Our Portfolio", "url": "/our-portfolio" }
+			]
+		},
+		{
+			"name": "footer",
+			"label": "Footer Navigation",
+			"items": [
+				{ "type": "custom", "label": "Our Team", "url": "/our-team" },
+				{ "type": "custom", "label": "Careers", "url": "/careers" },
+				{ "type": "custom", "label": "Locations", "url": "/locations" },
+				{ "type": "custom", "label": "Contact", "url": "/contact-us" },
+				{ "type": "custom", "label": "Privacy Policy", "url": "/privacy-policy" },
+				{ "type": "custom", "label": "Terms", "url": "/terms-of-use" },
+				{ "type": "custom", "label": "Disclaimer", "url": "/disclaimer" },
+				{ "type": "custom", "label": "EULA", "url": "/eula" }
+			]
+		},
+		{
+			"name": "social",
+			"label": "Social Navigation",
+			"items": [
+				{ "type": "custom", "label": "Facebook", "url": "https://www.facebook.com/paradoxmarketing" },
+				{ "type": "custom", "label": "LinkedIn", "url": "https://www.linkedin.com/company/paradox-marketing" }
+			]
+		}
+	],
+	"content": {}
+}

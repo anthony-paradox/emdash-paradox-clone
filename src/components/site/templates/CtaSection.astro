@@ -1,0 +1,26 @@
+---
+interface Props {
+	title?: string;
+	body?: string;
+	href?: string;
+	label?: string;
+}
+
+const {
+	title = "Ready to make everything click?",
+	body = "Let’s map the gaps in your website, advertising, and CRM—and build a system that moves together.",
+	href = "/contact-us",
+	label = "Let’s talk",
+} = Astro.props;
+---
+
+<section class="content-cta">
+	<div class="pdx-content-container content-cta__inner">
+		<div>
+			<p class="content-kicker">Start a conversation</p>
+			<h2>{title}</h2>
+			<p>{body}</p>
+		</div>
+		<a class="content-button" href={href} data-talk>{label}<span aria-hidden="true">↗</span></a>
+	</div>
+</section>

@@ -1,0 +1,42 @@
+---
+import { decodeSlug, getEmDashEntry } from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import ContentHero from "../../components/site/templates/ContentHero.astro";
+import CtaSection from "../../components/site/templates/CtaSection.astro";
+import { legalCanonical } from "../../data/routes";
+import "../../styles/paradox/content.css";
+
+const slug = decodeSlug(Astro.params.slug);
+
+if (!slug) {
+	return Astro.redirect("/404");
+}
+
+if (legalCanonical[slug]) {
+	return Astro.redirect(legalCanonical[slug], 308);
+}
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+
+if (!page) {
+	return Astro.redirect("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Base
+	title={page.data.title}
+	content={{ collection: "pages", id: page.data.id, slug }}
+>
+	<article class="marketing-page">
+		<ContentHero title={page.data.title} kicker="Page" />
+		<section class="content-section">
+			<div class="pdx-content-container legal-page__content">
+				<PortableText value={page.data.content} />
+			</div>
+		</section>
+		<CtaSection />
+	</article>
+</Base>

@@ -1,0 +1,100 @@
+---
+import { getMenu, getSiteSettings } from "emdash";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import { Font } from "astro:assets";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import SiteHeader from "../components/site/SiteHeader.astro";
+import SiteFooter from "../components/site/SiteFooter.astro";
+import "../styles/tokens.css";
+import "../styles/theme.css";
+import "../styles/paradox/chrome.css";
+
+interface Props {
+	title: string;
+	pageTitle?: string | null;
+	description?: string | null;
+	image?: string | null;
+	canonical?: string | null;
+	robots?: string | null;
+	type?: "website" | "article";
+	publishedTime?: string | null;
+	modifiedTime?: string | null;
+	author?: string | null;
+	/** Pass content reference for plugin page contributions on content pages. */
+	content?: { collection: string; id: string; slug?: string | null };
+	home?: boolean;
+}
+
+const {
+	title,
+	pageTitle,
+	description,
+	image,
+	canonical,
+	robots,
+	type = "website",
+	publishedTime,
+	modifiedTime,
+	author,
+	content,
+	home: _home = false,
+} = Astro.props;
+
+const [siteSettings, menu, footerMenu, socialMenu] = await Promise.all([
+	getSiteSettings(),
+	getMenu("primary"),
+	getMenu("footer"),
+	getMenu("social"),
+]);
+const { siteTitle } = resolveBlogSiteIdentity(siteSettings);
+const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
+const normalizedPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isHome = normalizedPath === "/";
+
+// Keep the full EmDash public page context so plugins, previews, SEO, and
+// content-specific contributions continue to receive the same route metadata.
+const pageCtx = createPublicPageContext({
+	Astro,
+	kind: content ? "content" : "custom",
+	pageType: type,
+	title: fullTitle,
+	pageTitle: pageTitle ?? title,
+	description,
+	canonical,
+	image,
+	content,
+	seo: { ogImage: image, robots },
+	articleMeta: { publishedTime, modifiedTime, author },
+	siteName: siteTitle,
+});
+
+const isLoggedIn = !!Astro.locals.user;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/fonts/sf-pro-display/stylesheet.css" />
+		<Font cssVariable="--font-mono" />
+		<title>{fullTitle}</title>
+		<EmDashHead page={pageCtx} />
+	</head>
+	<body class:list={["pdx-site", { "pdx-home": isHome }]}>
+		<EmDashBodyStart page={pageCtx} />
+		<SiteHeader menu={menu} isLoggedIn={isLoggedIn} isHome={isHome} />
+
+		<main id="content" class="pdx-site-main">
+			<slot />
+		</main>
+
+		<SiteFooter
+			footerMenu={footerMenu}
+			socialMenu={socialMenu}
+			settings={siteSettings}
+		/>
+		<EmDashBodyEnd page={pageCtx} />
+	</body>
+</html>

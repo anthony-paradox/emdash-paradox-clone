@@ -1,0 +1,345 @@
+
+/* Industry Section */
+section.industry-section {
+	margin-top: 100px;
+	padding: 0 !important;
+}
+
+.industry-section {
+
+	padding: 100px 0;
+	background: #2E74B2;
+}
+
+.industry-section h2 {
+	color: #FFF;
+	font-family: Roboto;
+	font-size: 36px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 44px;
+	margin-bottom: 40px;
+	margin-top: 0;
+	text-align: center;
+}
+
+.industry-section .industry-item {
+	width: 20%;
+	padding: 0 15px;
+	margin-bottom: 30px;
+	display: flex;
+}
+
+.industry-section .industry-item .item-wrapper {
+	padding: 30px 20px 20px 20px;
+	border-radius: 3px;
+	background: #F2F6FF;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 1;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+	text-decoration: none;
+}
+
+
+.industry-section .industry-item .item-wrapper:hover {
+	/* Box shadow on hover */
+	box-shadow: 0 0 10px rgba(255, 255, 255, .5);
+	scale: 1.02;
+}
+
+.industry-section .industry-item .featured-image {
+	margin-bottom: 25px;
+}
+
+.industry-section .industry-item .featured-image img {
+	height: 70px;
+	width: auto;
+}
+
+.industry-section .industry-item p {
+	text-align: center;
+	color: #323232;
+	text-align: center;
+	font-family: Roboto;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: bold;
+	margin: 0;
+	line-height: normal;
+}
+
+@media screen and (max-width: 992px) {
+	.industry-section .industry-item {
+		width: 50%;
+
+	}
+}
+
+@media screen and (max-width: 412px) {
+	.industry-section .industry-item {
+		width: 100%;
+
+	}
+}
+/* End Industry Section */
+/* Home Team */
+.home-team>.container {
+	padding-top: 0;
+	padding-bottom: 70px;
+}
+
+.home-team-header {
+	color: #323232;
+	font-size: 36px;
+	font-weight: 700;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.home-team-subheader {
+	color: #323232;
+	font-size: 16px;
+	text-align: center;
+	width: 100%;
+	margin: 0 auto 50px;
+}
+
+.home-team-name {
+	color: #2e74b2;
+	font-weight: 700;
+	font-size: 24px;
+}
+
+#team-slider .item img {
+	width: 250px;
+	margin: 0 auto 30px;
+}
+
+#technology-slider .item img {
+	width: 230px;
+	margin: 0 auto;
+}
+
+#team-slider,
+#technology-slider {
+	position: relative;
+	margin-bottom: 80px;
+}
+
+#team-slider .owl-nav,
+#technology-slider .owl-nav {
+	position: absolute;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	top: 50%;
+	transform: translatey(-50%);
+}
+
+#technology-slider .owl-nav {
+	margin-top: 0;
+}
+
+#technology-slider .owl-dots {
+	position: absolute;
+	width: 100%;
+	bottom: -70px;
+}
+
+.owl-dot:focus {
+	outline: none;
+}
+
+.owl-theme .owl-dots .owl-dot.active span,
+.owl-theme .owl-dots .owl-dot:hover span {
+	background: #2e74b2;
+}
+
+#team-slider .owl-nav button,
+#technology-slider .owl-nav button {
+	background: #2e74b2;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#team-slider .owl-nav button:focus,
+#technology-slider .owl-nav button:focus {
+	outline: none;
+}
+
+#team-slider .owl-nav button.owl-prev,
+#technology-slider .owl-nav button.owl-prev {}
+
+#team-slider .owl-nav button.owl-next,
+#technology-slider .owl-nav button.owl-next {}
+
+#team-slider .owl-nav button span,
+#technology-slider .owl-nav button span {
+	font-size: 40px;
+	line-height: 60px;
+	color: #fff;
+	margin-top: -10px;
+}
+
+@media (max-width: 600px) {
+	#technology-slider {
+		margin-bottom: 0;
+	}
+}
+
+@media (min-width: 992px) {
+	.home-team>.container {
+		padding-top: 100px;
+		padding-bottom: 100px;
+	}
+
+	.home-team-header {
+		font-size: 48px;
+	}
+
+	.home-team-subheader {
+		font-size: 18px;
+		width: 86%;
+	}
+
+	#team-slider .owl-nav button.owl-prev,
+	#technology-slider .owl-nav button.owl-prev {
+		margin-left: -60px;
+	}
+
+	#team-slider .owl-nav button.owl-next,
+	#technology-slider .owl-nav button.owl-next {
+		margin-right: -60px;
+	}
+
+	#team-slider .owl-nav button,
+	#technology-slider .owl-nav button {
+		width: 60px;
+		height: 60px;
+	}
+}
+
+/* End of Our Team CSS */
+
+/* Capabilities Section CSS */
+.capabilities-section {
+	background: #145D8F;
+	padding: 100px 0;
+}
+
+.capabilities-section h2 {
+	color: #FFF;
+
+	font-size: 36px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 44px;
+	margin-bottom: 40px;
+
+}
+
+.capabilities-section .capability-tabs {
+	margin-bottom: 30px;
+	display: flex;
+
+}
+
+.capabilities-section .capability-tabs .tab {
+	border-radius: 3px;
+	border: 1px solid #FFF;
+	color: #FFF;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	padding: 15px 20px;
+	transition: all .3s ease-in-out;
+	width: 100%;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+}
+
+.capabilities-section .capability-tabs .tab:hover {
+	background: #fff;
+
+	color: #2E74B2;
+
+}
+
+.capabilities-section .capability-item {
+	border-radius: 3px;
+	background: #F2F6FF;
+	margin-bottom: 30px;
+	padding: 20px;
+	width: 100%;
+	position: relative;
+    display: flex;
+    flex-direction: column;
+	align-items: center;
+}
+
+.capabilities-section .capability-item .capability-title {
+	color: #212529;
+	text-align: center;
+
+	font-size: 18px;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	margin-bottom: 40px;
+}
+
+.capabilities-section .capability-item .capability-btn {
+	text-transform: uppercase;
+	border-radius: 3px;
+	background: #FBB03C;
+	color: #FFF;
+	text-align: center;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	text-decoration: none;
+	padding: 10px 20px;
+}
+.capabilities-section .capability-item-wrapper{
+	display: flex;
+}
+.capabilities-section .capability-item .capability-content{
+	display: flex;
+	justify-content: space-between;
+    flex-direction: column;
+	height: 100%;
+}
+.capabilities-section .capability-item img{
+	height: 80px;
+    width: auto;
+	margin-bottom: 25px;
+}
+.capabilities-section .tab-content {
+	
+	display: none;
+}
+.capabilities-section .capability-tabs .tab.active {
+	color: #2E74B2;
+	background: #fff;
+	
+}
+.capabilities-section .tab-content.active {
+	display: flex;
+}
+#tabs{
+	margin-bottom: 30px;
+}
+
+/* End of Capabilities Section CSS */

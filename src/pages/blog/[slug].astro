@@ -1,0 +1,356 @@
+---
+import {
+	getEmDashEntry,
+	getEmDashCollection,
+	getTermsForEntries,
+	getSeoMeta,
+	decodeSlug,
+	getSiteSettings,
+} from "emdash";
+import { Image, PortableText, WidgetArea } from "emdash/ui";
+import { Comments, CommentForm } from "emdash/ui/comments";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getReadingTime } from "../../utils/reading-time";
+import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import { contentSlug, isStarterSlug } from "../../data/routes";
+
+const slug = decodeSlug(Astro.params.slug);
+
+if (!slug || isStarterSlug(slug)) {
+	return Astro.redirect("/404");
+}
+
+const { entry: post, cacheHint } = await getEmDashEntry("posts", slug);
+
+if (!post) {
+	return Astro.redirect("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+function getImageUrl(img: unknown): string | undefined {
+	if (!img || typeof img !== "object") return undefined;
+	const image = img as Record<string, unknown>;
+	if (typeof image.src === "string" && image.src) {
+		return image.src.startsWith("http") ? image.src : `${Astro.url.origin}${image.src}`;
+	}
+	const meta = image.meta as Record<string, unknown> | undefined;
+	const storageKey =
+		(typeof meta?.storageKey === "string" ? meta.storageKey : undefined) ||
+		(typeof image.id === "string" ? image.id : undefined);
+	if (storageKey) {
+		return `${Astro.url.origin}/_emdash/api/media/file/${storageKey}`;
+	}
+	return undefined;
+}
+
+const featuredImageUrl = getImageUrl(post.data.featured_image);
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(post, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+	defaultOgImage: featuredImageUrl,
+});
+const bylines = post.data.bylines ?? [];
+const readingTime = getReadingTime(post.data.content);
+const tags = post.data.terms?.tag ?? [];
+const { entries: recentPosts } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+	limit: 8,
+});
+const otherPosts = recentPosts
+	.filter((item) => item.id !== post.id && !isStarterSlug(contentSlug(item)))
+	.slice(0, 3);
+const otherTagsByEntry = await getTermsForEntries(
+	"posts",
+	otherPosts.map((item) => item.data.id),
+	"tag",
+);
+const otherPostsWithTags = otherPosts.map((item) => ({
+	post: item,
+	tags: otherTagsByEntry.get(item.data.id) ?? [],
+	bylines: item.data.bylines ?? [],
+}));
+const publishDate =
+	post.data.publishedAt?.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	}) ?? null;
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	image={seo.ogImage}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	type="article"
+	publishedTime={post.data.publishedAt?.toISOString() ?? null}
+	modifiedTime={post.data.updatedAt.toISOString()}
+	content={{ collection: "posts", id: post.data.id, slug }}
+>
+	<article class="article">
+		{
+			post.data.featured_image && (
+				<div class="article-hero" {...post.edit.featured_image}>
+					<Image image={post.data.featured_image} />
+				</div>
+			)
+		}
+		<div class="article-grid">
+			<aside class="article-meta-col">
+				<div class="meta-sticky">
+					{
+						bylines.length > 0 && (
+							<div class="meta-block byline-block">
+								<span class="meta-label">{bylines.length === 1 ? "Author" : "Authors"}</span>
+								<div class="bylines">
+									{bylines.map((credit) => (
+										<div class="byline">
+											{credit.byline.avatarMediaId && (
+												<img
+													src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
+													alt={credit.byline.displayName}
+													class="byline-avatar"
+												/>
+											)}
+											<div class="byline-info">
+												<span class="byline-name">{credit.byline.displayName}</span>
+												{credit.roleLabel && <span class="byline-role">{credit.roleLabel}</span>}
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+						)
+					}
+					{
+						publishDate && (
+							<div class="meta-block">
+								<span class="meta-label">Published</span>
+								<time class="meta-value">{publishDate}</time>
+							</div>
+						)
+					}
+					<div class="meta-block">
+						<span class="meta-label">Reading time</span>
+						<span class="meta-value">{readingTime} min</span>
+					</div>
+					{
+						tags.length > 0 && (
+							<div class="meta-block">
+								<span class="meta-label">Tags</span>
+								<div class="meta-tags">
+									{tags.map((tag) => (
+										<a href={`/tag/${tag.slug}`} class="meta-tag">
+											{tag.label}
+										</a>
+									))}
+								</div>
+							</div>
+						)
+					}
+				</div>
+			</aside>
+			<div class="article-main">
+				<header class="article-header">
+					<div class="article-meta">
+						{
+							bylines.length > 0 && (
+								<>
+									<span class="article-meta-byline">
+										{bylines.map((credit, index) => (
+											<>
+												{index > 0 && ", "}
+												{credit.byline.displayName}
+											</>
+										))}
+									</span>
+									<span class="meta-dot"></span>
+								</>
+							)
+						}
+						{
+							publishDate && (
+								<>
+									<time>{publishDate}</time>
+									<span class="meta-dot"></span>
+								</>
+							)
+						}
+						<span>{readingTime} min read</span>
+					</div>
+					<h1 class="article-title" {...post.edit.title}>{post.data.title}</h1>
+					{post.data.excerpt && (
+						<p class="article-excerpt" {...post.edit.excerpt}>
+							{post.data.excerpt}
+						</p>
+					)}
+				</header>
+				<div class="article-content">
+					<PortableText value={post.data.content} />
+				</div>
+				<div class="article-comments">
+					<Comments collection="posts" contentId={post.data.id} threaded />
+					<CommentForm collection="posts" contentId={post.data.id} />
+				</div>
+			</div>
+			<aside class="article-sidebar">
+				<div class="sidebar-sticky">
+					<nav class="toc" aria-label="Table of contents">
+						<h4 class="toc-title">On this page</h4>
+						<div class="toc-content" id="toc-content"></div>
+					</nav>
+					<div class="sidebar-widgets">
+						<WidgetArea name="sidebar" />
+					</div>
+				</div>
+			</aside>
+		</div>
+	</article>
+	{
+		otherPostsWithTags.length > 0 && (
+			<section class="more-posts">
+				<div class="more-inner">
+					<h2 class="more-title">Continue reading</h2>
+					<div class="more-grid">
+						{otherPostsWithTags.map(({ post: item, tags: postTags, bylines: postBylines }) => (
+							<PostCard
+								title={item.data.title}
+								excerpt={item.data.excerpt}
+								featuredImage={item.data.featured_image}
+								href={`/blog/${contentSlug(item)}`}
+								date={item.data.publishedAt ?? undefined}
+								readingTime={getReadingTime(item.data.content)}
+								tags={postTags.map((tag) => ({ slug: tag.slug, label: tag.label }))}
+								bylines={postBylines}
+							/>
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
+</Base>
+
+<script>
+	const root = document.querySelector(".article-content");
+	const toc = document.getElementById("toc-content");
+	if (root && toc) {
+		const headings = [...root.querySelectorAll("h2, h3")];
+		if (headings.length) {
+			const list = document.createElement("ul");
+			list.className = "toc-list";
+			for (const heading of headings) {
+				if (!heading.id) {
+					heading.id = heading.textContent?.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "";
+				}
+				const item = document.createElement("li");
+				item.className = heading.tagName === "H3" ? "toc-item toc-item--nested" : "toc-item";
+				const link = document.createElement("a");
+				link.className = "toc-link";
+				link.href = `#${heading.id}`;
+				link.textContent = heading.textContent ?? "";
+				item.append(link);
+				list.append(item);
+			}
+			toc.replaceChildren(list);
+		}
+	}
+</script>
+
+<style>
+	.article {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+	}
+
+	.article-hero {
+		margin: var(--spacing-16) var(--spacing-6);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+
+	.article-grid {
+		display: grid;
+		grid-template-columns: var(--meta-col-width) minmax(0, var(--content-width)) var(--gutter-width);
+		gap: var(--spacing-10);
+		padding: 0 var(--spacing-6);
+		margin: var(--spacing-16) 0;
+		justify-content: center;
+	}
+
+	.meta-sticky,
+	.sidebar-sticky {
+		position: sticky;
+		top: calc(var(--nav-height) + var(--spacing-8));
+	}
+
+	.meta-label,
+	.toc-title {
+		display: block;
+		margin-bottom: var(--spacing-3);
+		font-size: var(--font-size-xs);
+		font-weight: 500;
+		letter-spacing: var(--tracking-wide);
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.article-title {
+		margin-bottom: var(--spacing-4);
+		font-size: clamp(2rem, 5vw, var(--font-size-5xl));
+		font-weight: var(--font-weight-display);
+		line-height: var(--leading-tight);
+	}
+
+	.article-excerpt,
+	.article-content {
+		color: var(--color-text-secondary);
+		line-height: var(--leading-relaxed);
+	}
+
+	.article-content :global(h2),
+	.article-content :global(h3) {
+		scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
+	}
+
+	.more-posts {
+		margin-top: var(--spacing-16);
+		padding: var(--spacing-16) 0;
+		background: var(--color-bg-subtle);
+	}
+
+	.more-inner {
+		max-width: var(--wide-width);
+		margin: 0 auto;
+		padding: 0 var(--spacing-6);
+	}
+
+	.more-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--spacing-8);
+	}
+
+	@media (max-width: 1100px) {
+		.article-grid {
+			grid-template-columns: minmax(0, var(--content-width));
+		}
+
+		.article-meta-col,
+		.article-sidebar {
+			display: none;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.more-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

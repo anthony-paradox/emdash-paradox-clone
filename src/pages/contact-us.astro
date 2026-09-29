@@ -1,0 +1,52 @@
+---
+import Base from "../layouts/Base.astro";
+import ContentHero from "../components/site/templates/ContentHero.astro";
+import { HUBSPOT } from "../data/live-site";
+import "../styles/paradox/content.css";
+---
+
+<Base title="Contact Us" description="Talk with Paradox Marketing.">
+	<ContentHero title="Contact us" intro="Tell us about the marketing system you want to connect." kicker="Let's talk" />
+	<section class="content-section">
+		<div class="pdx-content-container">
+			<div id="hubspot-contact">
+				<p>Loading form...</p>
+			</div>
+			<p>
+				Prefer a meeting? <a href={HUBSPOT.meetingUrl} data-talk>Book a discovery call</a>.
+			</p>
+		</div>
+	</section>
+</Base>
+
+<script define:vars={{ portalId: HUBSPOT.portalId, formId: HUBSPOT.formId, region: HUBSPOT.region, redirectBase: HUBSPOT.redirectBase }}>
+	const boot = async () => {
+		if (!window.hbspt?.forms) {
+			await new Promise((resolve) => {
+				const script = document.createElement("script");
+				script.src = "https://js.hsforms.net/forms/embed/v2.js";
+				script.onload = () => resolve();
+				document.body.appendChild(script);
+			});
+		}
+		if (!window.hbspt?.forms) return;
+		document.querySelector("#hubspot-contact")?.replaceChildren();
+		window.hbspt.forms.create({
+			portalId,
+			formId,
+			region,
+			target: "#hubspot-contact",
+			onFormSubmitted(_form, data) {
+				const values = data?.submissionValues || {};
+				const params = new URLSearchParams({
+					firstname: values.firstname || "",
+					lastname: values.lastname || "",
+					email: values.email || "",
+					company: values.company || "",
+				});
+				window.location.href = `${redirectBase}?${params.toString()}`;
+			},
+		});
+	};
+	void boot();
+</script>

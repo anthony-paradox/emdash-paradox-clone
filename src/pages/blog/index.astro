@@ -1,0 +1,42 @@
+---
+import Base from "../../layouts/Base.astro";
+import ContentHero from "../../components/site/templates/ContentHero.astro";
+import CtaSection from "../../components/site/templates/CtaSection.astro";
+import RecentContent from "../../components/site/templates/RecentContent.astro";
+import { loadEntries } from "../../utils/entries";
+import "../../styles/paradox/content.css";
+
+const posts = (await loadEntries("posts")).slice(0, 12);
+const recent = posts.slice(0, 3);
+---
+
+<Base
+	title="Paradox Blog"
+	description="Explore our latest digital marketing insights, from helpful guides and WordPress plugin reviews to advanced strategies—something for every marketer!"
+>
+	<ContentHero
+		title="Paradox Blog"
+		intro="Explore our latest digital marketing insights, from helpful guides and WordPress plugin reviews to advanced strategies—something for every marketer!"
+		kicker="Blog"
+		variant="insight"
+	/>
+	<section class="content-section">
+		<div class="pdx-content-container">
+			<div class="archive-grid">
+				{
+					posts.map((post) => (
+						<a class="entry-card" href={`/blog/${post.slug}`}>
+							{post.image && <img src={post.image} alt="" />}
+							<h2>{post.title}</h2>
+							{post.date && <p class="post-date">{post.date}</p>}
+							<p>{post.excerpt}</p>
+							<span class="read-more">Read More</span>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+	<RecentContent entries={recent} basePath="/blog" title="Recent posts" />
+	<CtaSection />
+</Base>

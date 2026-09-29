@@ -1,0 +1,7 @@
+---
+import { legalCanonical } from "../../data/routes";
+
+const slug = Astro.params.slug ?? "";
+const dest = legalCanonical[slug] ?? `/pages/${slug}`;
+return Astro.redirect(dest, 308);
+---

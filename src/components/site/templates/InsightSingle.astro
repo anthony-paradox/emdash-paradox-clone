@@ -1,0 +1,17 @@
+---
+import SinglePage from "../SinglePage.astro";
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<SinglePage
+	collection="insights"
+	slug={slug}
+	kicker="Insight"
+	variant="insight"
+	basePath="/insights"
+/>

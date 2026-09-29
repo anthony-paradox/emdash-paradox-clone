@@ -1,0 +1,97 @@
+/*
+  Paradox Marketing brand overrides.
+  Unlayered so these beat tokens.css defaults.
+*/
+
+:root {
+	color-scheme: light;
+	--color-blue: #2f92cd;
+	--color-lightblue: #50a7dc;
+	--color-darkblue: #2e74b2;
+	--color-yellow: #fbb03c;
+	--color-yellow-hover: #ffbb51;
+	--color-gray: #d6d6d6;
+	--color-darkgray: #7a7a7a;
+	--color-gold: #efb155;
+
+	--color-bg: #ffffff;
+	--color-bg-subtle: #f2f6ff;
+	--color-text: #212529;
+	--color-text-secondary: #323232;
+	--color-muted: #7a7a7a;
+	--color-border: #d6d6d6;
+	--color-border-subtle: #e8e8e8;
+	--color-surface: #f2f6ff;
+	--color-brand: #2e74b2;
+	--color-brand-hover: #145d8f;
+	--color-on-brand: #ffffff;
+	--color-brand-ring: color-mix(in srgb, var(--color-brand) 25%, transparent);
+
+	--font-body: "SF Pro Display", "Segoe UI", sans-serif;
+	--font-heading: "SF Pro Display", "Segoe UI", sans-serif;
+	--font-weight-heading: 700;
+	--font-weight-display: 700;
+
+	--wide-width: 1400px;
+	--content-width: 1100px;
+	--header-height: 88px;
+}
+
+body {
+	font-family: var(--font-body);
+	background: var(--color-bg);
+	color: var(--color-text);
+}
+
+a {
+	color: var(--color-darkblue);
+}
+
+.pdx-button,
+.pdx-button:active,
+.pdx-button:focus {
+	background-color: var(--color-yellow);
+	color: #fff;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 500;
+	transition: background-color 300ms ease-in;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	padding: 16px 28px;
+	line-height: 1;
+	border: none;
+	border-radius: 0;
+}
+
+.pdx-button:hover {
+	background-color: var(--color-yellow-hover);
+	color: #fff;
+	text-decoration: none;
+}
+
+.btn-book-a-discovery-call {
+	margin-top: 0;
+	padding: 12px 40px;
+	font-size: 16px;
+	font-family: var(--font-body);
+	border-radius: 40px;
+	background: var(--color-gold);
+	font-weight: 700;
+	color: #000;
+	display: inline-flex;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.btn-book-a-discovery-call:hover {
+	background: var(--color-yellow-hover);
+	color: #000;
+}
+
+.nav-admin {
+	margin-inline-start: var(--spacing-5);
+	color: #fff;
+	font-size: 14px;
+}

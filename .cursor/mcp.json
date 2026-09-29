@@ -1,0 +1,15 @@
+{
+	"mcpServers": {
+		"emdash-docs": {
+			"type": "http",
+			"url": "https://docs.emdashcms.com/mcp"
+		},
+		"emdash": {
+			"type": "http",
+			"url": "http://localhost:4321/_emdash/api/mcp",
+			"headers": {
+				"Authorization": "Bearer ${env:EMDASH_MCP_TOKEN}"
+			}
+		}
+	}
+}

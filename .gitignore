@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+.emdash/migrations.json
+uploads
+data.db
+.reference
+
+# Environment
+.env
+.env.*
+!.env.example

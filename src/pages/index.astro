@@ -1,0 +1,351 @@
+---
+import Base from "../layouts/Base.astro";
+import { homeLive } from "../data/live-site";
+import { loadHome } from "../utils/home";
+import "../styles/paradox/home.css";
+
+const home = await loadHome();
+---
+
+<Base title="Have Our Team Become YOUR Team" description={home.heroBody} home>
+	<div class="homepage-2026">
+		<section class="hero-video">
+			<video class="hero-bg-video" autoplay muted loop playsinline poster={home.heroPoster} src={home.heroVideo}></video>
+			<div class="hero-overlay"></div>
+			<div class="hero-content pdx-container">
+				<div class="hero-grid">
+					<div>
+						<h1 set:html={home.heroHeadingHtml} />
+						<p>{home.heroBody}</p>
+						<a class="btn-talk" href="/contact-us" data-talk>{homeLive.heroCta}</a>
+					</div>
+					<img src={home.heroImage} alt="Paradox Marketing strategy triangle" width="500" height="500" />
+				</div>
+			</div>
+		</section>
+
+		<section class="what-we-do">
+			<div class="pdx-container">
+				<div class="logos">
+					<p set:html={home.logoHeaderHtml} />
+					<div class="logos-marquee">
+						<div class="logos-track">
+							{[...home.logos, ...home.logos].map((src) => <img src={src} alt="" />)}
+						</div>
+					</div>
+				</div>
+				<div class="wwd-split">
+					<h2 set:html={home.wwdHeadingHtml} />
+					<div set:html={home.wwdHtml} />
+				</div>
+			</div>
+		</section>
+
+		<section class="triangle-graphic">
+			<div class="pdx-container pillar-grid">
+				{
+					home.pillars.map((pillar) => (
+						<article class="pillar-card">
+							<h3>{pillar.title}</h3>
+							<ul>
+								{pillar.points.map((point) => (
+									<li>{point}</li>
+								))}
+							</ul>
+							<a href={pillar.href}>{pillar.cta}</a>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="problems">
+			<div class="pdx-container">
+				<h2 set:html={home.problemsHeadingHtml} />
+				<div class="problem-grid">
+					{
+						home.problems.map((item) => (
+							<article class="problem-card">
+								<img src={item.image} alt={item.label} />
+								<h3>{item.label}</h3>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="records">
+			<div class="pdx-container records-panel">
+				<div class="metric-grid">
+					{
+						home.records.map((group) => (
+							<article class="metric-card">
+								<h3>{group.title}</h3>
+								{group.stats.map((stat) => (
+									<div class="stat-box">
+										<span class="stat-number">{stat.value}</span>
+										<span class="stat-label">{stat.label}</span>
+									</div>
+								))}
+							</article>
+						))
+					}
+				</div>
+				<div class="center">
+					<a class="btn-talk" href="/contact-us" data-talk>Let's Talk</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="work-with-us">
+			<div class="pdx-container split">
+				<div class="left">
+					<h2 set:html={home.workWithUsLeftHtml} />
+				</div>
+				<div class="right">
+					<h2 set:html={home.workWithUsRightHtml} />
+					<p>{home.workWithUsBody}</p>
+					<a class="btn-talk" href="/contact-us" data-talk>Let's Talk</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="reviews">
+			<div class="pdx-container reviews-panel">
+				<h2>See What Our Clients<br />Are <span>Saying About Us</span></h2>
+				<div class="clutch-badge">
+					<img src="https://paradoxmarketing.io/wp-content/uploads/2026/06/clutch-logo-webp.webp" alt="Clutch Review" width="187" height="50" />
+				</div>
+				<div class="carousel" data-carousel="reviews">
+					{
+						home.reviews.map((review) => (
+							<article class="review-card">
+								<div>
+									<p><strong>{review.stars ?? 5}.0</strong> <span class="stars">{"★".repeat(review.stars ?? 5)}</span></p>
+									<p>“{review.quote ?? review.excerpt}”</p>
+								</div>
+								<div class="reviewer">
+									<strong>{review.title}</strong>
+									<span>{review.position}</span>
+									<div class="verified">Verified Review</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="technology">
+			<div class="pdx-container">
+				<h2 style="text-align:center">Our <span>Technology</span></h2>
+				<div class="tech-copy" set:html={home.techCopyHtml} />
+				{
+					home.tech.map((row) => (
+						<div class="tech-row">
+							<div class="tech-label" style={`background:${row.color}`}>{row.label}</div>
+							<div class="tech-logos carousel" data-carousel="tech">
+								{row.logos.map((src) => <img src={src} alt="" />)}
+							</div>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="our-work">
+			<div class="pdx-container">
+				<h2><span>Our Work</span> Examples</h2>
+				<div class="carousel" data-carousel="work">
+					{
+						home.work.map((item) => (
+							<a class="work-card" href={item.href ?? `/our-portfolio/${item.slug}`}>
+								<div class="work-image-wrap">
+									<img src={item.image} alt={item.title} />
+									<div class="work-overlay">{item.services}</div>
+								</div>
+								<div class="work-footer">
+									<span>{item.title}</span>
+									<span>{item.year}</span>
+								</div>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="who-we-are">
+			<div class="pdx-container">
+				<div class="split">
+					<div class="left">
+						<h2>Who <span>We Are</span></h2>
+					</div>
+					<div>
+						<p>{home.who}</p>
+						<p>{home.whoSecondary}</p>
+					</div>
+				</div>
+				<div class="who-map">
+					<img src="/maps/who-map.svg" alt="Where the Paradox team works" />
+				</div>
+			</div>
+		</section>
+
+		<section class="insights-section">
+			<div class="pdx-container">
+				<h2>Our Digital Marketing <span>Insights</span></h2>
+				<div class="insight-grid">
+					{
+						home.insights.map((item) => (
+							<a class="insight-card" href={item.href ?? `/insights/${item.slug}`}>
+								<img src={item.image} alt="" />
+								<h3>{item.title}</h3>
+								<p>{item.excerpt}</p>
+								<div class="insight-meta">
+									<span>{item.date}</span>
+									<span class="insight-go" aria-hidden="true">↗</span>
+								</div>
+							</a>
+						))
+					}
+				</div>
+				<div class="center-btn">
+					<a class="btn-talk" href="/contact-us" data-talk>Let's Talk</a>
+				</div>
+			</div>
+		</section>
+	</div>
+</Base>
+
+<script>
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	function initCarousel(track: HTMLElement) {
+		const originals = [...track.children] as HTMLElement[];
+		if (originals.length < 2) return;
+
+		const kind = track.dataset.carousel ?? "work";
+		const speed = kind === "tech" ? 0.6 : kind === "reviews" ? 0.75 : 0.7;
+
+		if (!track.dataset.looped) {
+			originals.forEach((node) => track.append(node.cloneNode(true)));
+			track.dataset.looped = "true";
+		}
+
+		track.classList.add("is-draggable");
+
+		let offset = 0;
+		let dragging = false;
+		let moved = false;
+		let startX = 0;
+		let startOffset = 0;
+		let pointerId = 0;
+		let raf = 0;
+		let lastTs = 0;
+
+		const loopWidth = () => {
+			const styles = getComputedStyle(track);
+			const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+			return originals.reduce((sum, el) => sum + el.offsetWidth + gap, 0);
+		};
+
+		const applyOffset = () => {
+			const width = loopWidth();
+			if (width <= 0) return;
+			offset = ((offset % width) + width) % width;
+			track.scrollLeft = offset;
+		};
+
+		const animate = (ts: number) => {
+			if (!lastTs) lastTs = ts;
+			const delta = Math.min(40, ts - lastTs);
+			lastTs = ts;
+
+			if (!dragging && !reduceMotion) {
+				offset += speed * (delta / 16.67);
+				applyOffset();
+			}
+
+			raf = requestAnimationFrame(animate);
+		};
+
+		const onPointerDown = (event: PointerEvent) => {
+			if (event.pointerType === "mouse" && event.button !== 0) return;
+			dragging = true;
+			moved = false;
+			startX = event.clientX;
+			startOffset = offset;
+			pointerId = event.pointerId;
+			track.setPointerCapture(pointerId);
+			track.classList.add("is-dragging");
+		};
+
+		const onPointerMove = (event: PointerEvent) => {
+			if (!dragging || event.pointerId !== pointerId) return;
+			const dx = event.clientX - startX;
+			if (Math.abs(dx) > 4) moved = true;
+			offset = startOffset - dx;
+			applyOffset();
+			event.preventDefault();
+		};
+
+		const onPointerUp = (event: PointerEvent) => {
+			if (event.pointerId !== pointerId) return;
+			dragging = false;
+			track.classList.remove("is-dragging");
+			lastTs = 0;
+			try {
+				track.releasePointerCapture(pointerId);
+			} catch {
+				/* already released */
+			}
+		};
+
+		track.addEventListener("pointerdown", onPointerDown);
+		track.addEventListener("pointermove", onPointerMove, { passive: false });
+		track.addEventListener("pointerup", onPointerUp);
+		track.addEventListener("pointercancel", onPointerUp);
+		track.addEventListener(
+			"click",
+			(event) => {
+				if (!moved) return;
+				event.preventDefault();
+				event.stopPropagation();
+			},
+			true,
+		);
+		track.addEventListener(
+			"wheel",
+			(event) => {
+				if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+				event.preventDefault();
+				offset += event.deltaY;
+				applyOffset();
+			},
+			{ passive: false },
+		);
+		track.addEventListener(
+			"dragstart",
+			(event) => {
+				event.preventDefault();
+			},
+			true,
+		);
+
+		// Wait a frame so flex/image sizes are ready before measuring loop width.
+		requestAnimationFrame(() => {
+			applyOffset();
+			raf = requestAnimationFrame(animate);
+		});
+
+		window.addEventListener(
+			"beforeunload",
+			() => cancelAnimationFrame(raf),
+			{ once: true },
+		);
+	}
+
+	document.querySelectorAll<HTMLElement>("[data-carousel]").forEach(initCarousel);
+</script>

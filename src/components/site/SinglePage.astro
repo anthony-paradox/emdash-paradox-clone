@@ -1,0 +1,249 @@
+---
+import Base from "../../layouts/Base.astro";
+import { loadEntries, loadEntry } from "../../utils/entries";
+import ContentHero from "./templates/ContentHero.astro";
+import MetricSection from "./templates/MetricSection.astro";
+import CtaSection from "./templates/CtaSection.astro";
+import RecentContent from "./templates/RecentContent.astro";
+import "../../styles/paradox/content.css";
+
+type Family =
+	| "capability"
+	| "industry"
+	| "insight"
+	| "portfolio"
+	| "case"
+	| "team"
+	| "career"
+	| "location";
+
+interface Props {
+	collection: string;
+	slug: string;
+	kicker?: string;
+	variant?: Family;
+	basePath?: string;
+}
+
+const {
+	collection,
+	slug,
+	kicker,
+	variant = "insight",
+	basePath = `/${collection.replaceAll("_", "-")}`,
+} = Astro.props;
+const entry = await loadEntry(collection, slug);
+if (!entry) return new Response(null, { status: 404 });
+
+// Entry is deliberately treated as a minimal view model. Rich copy stays
+// optional so current fixtures and future EmDash collections render safely.
+const related = (await loadEntries(collection))
+	.filter((item) => item.slug !== entry.slug)
+	.slice(0, variant === "insight" ? 5 : 3);
+const headings = (entry.content ?? "")
+	.split("\n")
+	.filter((line) => /^#{2,3}\s+/.test(line))
+	.map((line) => line.replace(/^#{2,3}\s+/, ""));
+const serviceTags = entry.tags ?? [];
+const ctaHref =
+	serviceTags
+		.map((tag) => tag.toLowerCase())
+		.includes("website design") || serviceTags.includes("Digital Brand Development")
+		? "/capabilities/digital-brand-development"
+		: "/contact-us";
+
+const familyCopy: Record<Family, {
+	kicker: string;
+	eyebrow: string;
+	title: string;
+	body: string;
+	points: string[];
+	metrics: { value: string; label: string }[];
+	recent: string;
+	cta: string;
+}> = {
+	capability: {
+		kicker: "Capability",
+		eyebrow: "Connected expertise",
+		title: "One capability, built into the whole system",
+		body: "We connect strategy, execution, measurement, and follow-up so this work compounds instead of becoming another isolated tactic.",
+		points: ["Strategy tied to commercial goals", "Specialists working from shared data", "Clear measurement and iteration"],
+		metrics: [
+			{ value: "100+", label: "websites under management" },
+			{ value: "6K+", label: "monthly leads generated" },
+			{ value: "1K+", label: "processes automated" },
+		],
+		recent: "More capabilities",
+		cta: "Connect this capability to your growth system",
+	},
+	industry: {
+		kicker: "Industry",
+		eyebrow: "Built around your market",
+		title: "Expertise starts with understanding the context",
+		body: "The buying journey, sales cycle, language, and constraints of your industry shape every part of the system we build.",
+		points: ["Audience and journey research", "Industry-aware content and campaigns", "Systems designed around the real sales process"],
+		metrics: [
+			{ value: "12+", label: "countries represented" },
+			{ value: "10", label: "core industries served" },
+			{ value: "One", label: "connected team" },
+		],
+		recent: "Explore other industries",
+		cta: "Build a system for your market",
+	},
+	insight: {
+		kicker: "Insight",
+		eyebrow: "From the field",
+		title: "Turn useful thinking into practical action",
+		body: "The best marketing ideas survive contact with the real system: people, process, technology, and measurement.",
+		points: ["Start with the business problem", "Connect insight to execution", "Measure what changes next"],
+		metrics: [
+			{ value: "4M+", label: "annual organic clicks" },
+			{ value: "$400K", label: "monthly ad spend managed" },
+			{ value: "100+", label: "sites producing insight" },
+		],
+		recent: "More insights",
+		cta: "Put the idea to work",
+	},
+	portfolio: {
+		kicker: "Portfolio",
+		eyebrow: "Selected work",
+		title: "Designed to look sharp—and work hard",
+		body: "Our work connects the public experience to the operational system behind it, giving every interaction a useful next step.",
+		points: ["Clear positioning and experience", "Conversion paths with purpose", "A maintainable foundation for growth"],
+		metrics: [
+			{ value: "100+", label: "sites under management" },
+			{ value: "4M+", label: "annual organic clicks" },
+			{ value: "170+", label: "sales reps supported" },
+		],
+		recent: "More selected work",
+		cta: "Build work that keeps working",
+	},
+	case: {
+		kicker: "Case study",
+		eyebrow: "The work behind the result",
+		title: "Change the system, then change the numbers",
+		body: "Sustainable results come from identifying the constraint, connecting the right disciplines, and improving with evidence.",
+		points: ["A clear baseline and priority", "Connected delivery across channels", "Reporting focused on business outcomes"],
+		metrics: [
+			{ value: "6K+", label: "monthly leads generated" },
+			{ value: "1K+", label: "automated processes" },
+			{ value: "4M+", label: "annual organic clicks" },
+		],
+		recent: "More client results",
+		cta: "Create your next case study",
+	},
+	team: {
+		kicker: "Team",
+		eyebrow: "People of Paradox",
+		title: "Specialist depth without specialist silos",
+		body: "Our distributed team combines deep craft with shared accountability. The client gets the right expertise and one connected plan.",
+		points: ["Remote-first collaboration", "Cross-discipline problem solving", "Direct, transparent communication"],
+		metrics: [
+			{ value: "12+", label: "countries represented" },
+			{ value: "Remote", label: "by design" },
+			{ value: "One", label: "connected team" },
+		],
+		recent: "Meet more of the team",
+		cta: "Work with the Paradox team",
+	},
+	career: {
+		kicker: "Career",
+		eyebrow: "Build with us",
+		title: "Do your best work with people who care",
+		body: "We are building a thoughtful, remote company for specialists who are curious, accountable, and generous with what they know.",
+		points: ["Remote work with real collaboration", "Ownership and room to improve", "Work spanning the full growth system"],
+		metrics: [
+			{ value: "12+", label: "countries and perspectives" },
+			{ value: "Remote", label: "work from where you thrive" },
+			{ value: "Always", label: "learning together" },
+		],
+		recent: "Other opportunities",
+		cta: "Bring your perspective to Paradox",
+	},
+	location: {
+		kicker: "Location",
+		eyebrow: "Connected everywhere",
+		title: "Global perspective, close collaboration",
+		body: "Our remote model lets us assemble the right team around the work while staying responsive across markets and time zones.",
+		points: ["Distributed specialist network", "Flexible cross-time-zone delivery", "Local context with global perspective"],
+		metrics: [
+			{ value: "12+", label: "countries represented" },
+			{ value: "24/5", label: "collaboration across time zones" },
+			{ value: "Global", label: "client perspective" },
+		],
+		recent: "Explore our locations",
+		cta: "Work with us from anywhere",
+	},
+};
+
+const copy = familyCopy[variant];
+---
+
+<Base title={entry.title} description={entry.excerpt}>
+	<article class={`marketing-single marketing-single--${variant}`}>
+		<ContentHero
+			title={entry.title}
+			intro={entry.excerpt}
+			kicker={kicker ?? copy.kicker}
+			variant={variant}
+		/>
+
+		<section class="content-section content-overview">
+			<div class="pdx-content-container content-overview__grid">
+				<div class="content-section__heading">
+					<p class="content-kicker">{copy.eyebrow}</p>
+					<h2>{copy.title}</h2>
+					{entry.content ? (
+						<div class="entry-body">
+							{entry.content.split(/\n\n+/).map((para) =>
+								para.startsWith("## ") ? <h3>{para.replace(/^##\s+/, "")}</h3> : <p>{para}</p>
+							)}
+						</div>
+					) : (
+						<p>{entry.excerpt || copy.body}</p>
+					)}
+				</div>
+				<div class="content-overview__panel">
+					{variant === "insight" && headings.length ? (
+						<>
+							<p class="content-kicker">On this page</p>
+							<ul>
+								{headings.map((heading) => <li>{heading}</li>)}
+							</ul>
+						</>
+					) : (
+						<>
+							<p class="content-kicker">What to expect</p>
+							<ul>
+								{copy.points.map((point) => <li>{point}</li>)}
+							</ul>
+						</>
+					)}
+					{entry.position && <p><strong>{entry.position}</strong></p>}
+					{entry.mantra && <p>{entry.mantra}</p>}
+					{entry.linkedin && (
+						<p>
+							<a href={entry.linkedin} target="_blank" rel="noopener noreferrer">
+								LinkedIn
+							</a>
+						</p>
+					)}
+					{entry.year && <p>{entry.services} · {entry.year}</p>}
+					{entry.locationLabel && <p>{entry.locationLabel}</p>}
+					{variant === "insight" && serviceTags.length ? (
+						<div class="content-tags">
+							<p class="content-kicker">Related</p>
+							{serviceTags.map((tag) => (
+								<a href={ctaHref}>{tag}</a>
+							))}
+						</div>
+					) : null}
+				</div>
+			</div>
+		</section>
+
+		<MetricSection metrics={copy.metrics} title="Connected work, measurable impact" />
+		<RecentContent entries={related} basePath={basePath} title={copy.recent} />
+		<CtaSection title={copy.cta} />
+	</article>
+</Base>

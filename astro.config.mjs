@@ -6,8 +6,14 @@ import emdash from "emdash/astro";
 import vercel from "@astrojs/vercel";
 import { libsql, sqlite } from "emdash/db";
 
-const tursoUrl = process.env.TURSO_DATABASE_URL?.replace(/^"|"$/g, "");
-const tursoToken = process.env.TURSO_AUTH_TOKEN?.replace(/^"|"$/g, "");
+// EMDASH_DATABASE_* wins because the Turso integration's production "branch"
+// deployment action rewrites TURSO_* to a per-deployment database branch.
+const tursoUrl = (
+	process.env.EMDASH_DATABASE_URL ?? process.env.TURSO_DATABASE_URL
+)?.replace(/^"|"$/g, "");
+const tursoToken = (
+	process.env.EMDASH_DATABASE_AUTH_TOKEN ?? process.env.TURSO_AUTH_TOKEN
+)?.replace(/^"|"$/g, "");
 const blobStorageEntry = fileURLToPath(
 	new URL("./src/storage/vercel-blob.ts", import.meta.url),
 ).replaceAll("\\", "/");
